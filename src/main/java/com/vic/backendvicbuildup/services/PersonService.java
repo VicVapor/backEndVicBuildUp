@@ -30,6 +30,7 @@ public class PersonService {
         Person personById = personRepository.findById(person.getPerson_Id()).get();
         System.out.println("Persona antigua: " + personById);
         personById.setEmail(person.getEmail());
+        personById.setPerson_Password(person.getPerson_Password());
         personById.setFirst_Name(person.getFirst_Name());
         personById.setLast_Name(person.getLast_Name());
         personById.setAge(person.getAge());

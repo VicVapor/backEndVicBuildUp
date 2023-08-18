@@ -15,6 +15,7 @@ public class Person {
     private int person_Id;
 
     private String email;
+    private String person_Password;
     private String first_Name;
     private String last_Name;
     private int age;
