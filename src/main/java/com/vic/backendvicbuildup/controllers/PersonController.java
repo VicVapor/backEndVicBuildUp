@@ -1,12 +1,14 @@
 package com.vic.backendvicbuildup.controllers;
 
 import com.vic.backendvicbuildup.models.Person;
+import com.vic.backendvicbuildup.services.EncryptService;
 import com.vic.backendvicbuildup.services.PersonService;
 
 import org.hibernate.Internal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpServerErrorException;
 
@@ -18,7 +20,11 @@ import java.util.NoSuchElementException;
 public class PersonController {
 
     @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
     PersonService personService;
+    EncryptService encryptService = new EncryptService();
 
     @GetMapping("")
     public ResponseEntity<?> getPersons() {
@@ -40,9 +46,15 @@ public class PersonController {
         }
     }
 
+    /*Hay 2 formas de encriptar la contraseña en este backend:
+        1- Usando el servicio EncryptService y su método encryptPassword
+        2- Usando el passwordEncoder de Spring Security
+    */
     @PostMapping("")
     public ResponseEntity<?> savePerson(@RequestBody Person person) {
         try {
+//            person.setPerson_Password(encryptService.encryptPassword(person.getPerson_Password()));
+            person.setPerson_Password(passwordEncoder.encode(person.getPerson_Password()));
             System.out.println("Persona: " + person);
             return ResponseEntity.status(HttpStatus.OK).body(this.personService.savePerson(person));
         } catch (Exception e) {
